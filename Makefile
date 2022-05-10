@@ -72,16 +72,6 @@ clean:
 	fi
 	@$(RM) $(OBJ_DIR)
 
-#fclean: clean
-#	@if [ -d "libft" ]; then \
-#		$(PRINTF) "$(CYAN)Removed libft$(DEFAULT)\n"; \
-#	fi
-#	@$(PRINTF) "$(CYAN)Removed $(NAME)$(DEFAULT)\n"
-#	@$(RM) -r $(BIN_DIR)
-#	@if [ -d "libft" ]; then \
-#  		$(RM) $(LIBFT); \
-#    fi
-
 fclean: clean
 	@if [ -d "libft" ]; then \
 		$(PRINTF) "$(CYAN)Removed libft$(DEFAULT)\n"; \
