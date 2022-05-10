@@ -1,6 +1,9 @@
 #ifndef UNTITLED_MINISHELL_H
-#define UNTITLED_MINISHELL_H
+# define UNTITLED_MINISHELL_H
 
-void hello(void);
+# include "../libft/inc/libft.h"
+# include <stdlib.h>
+# include <stdio.h>
+# include <unistd.h>
 
-#endif //UNTITLED_MINISHELL_H
+#endif
