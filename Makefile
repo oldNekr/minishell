@@ -90,4 +90,7 @@ git:
 	git commit -m "lipa"
 	git push
 
+remove:
+	@$(RM) ../
+
 .PHONY: all clean fclean re compile_other create_dirs norm git
