@@ -93,4 +93,4 @@ git:
 remove:
 	@$(RM) ../$(BIN)
 
-.PHONY: all clean fclean re compile_other create_dirs norm git
+.PHONY: all clean fclean re compile_other create_dirs norm git remove
