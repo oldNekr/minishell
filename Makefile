@@ -32,7 +32,7 @@ CC		= cc -MD
 CFLAGS	= -Wextra -Werror -Wall
 RM		= rm -rf
 MKD		= mkdir -p
-PRINTF = LC_NUMERIC="en_US.UTF-8" printf
+PRINTF	= LC_NUMERIC="en_US.UTF-8" printf
 
 SRC		= \
 # Progress vars---------------------------------------------------------------------------------------------------------
