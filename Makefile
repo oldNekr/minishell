@@ -17,7 +17,6 @@ BLUE	= \033[0;94m
 CYAN	= \033[0;96m
 
 # Make variables--------------------------------------------------------------------------------------------------------
-SRC		= \
 BIN_DIR	= bin
 SRC_DIR	= src
 OBJ_DIR	= obj
@@ -34,6 +33,7 @@ CFLAGS	= -Wextra -Werror -Wall
 RM		= rm -rf
 MKD		= mkdir -p
 
+SRC		= \
 # Progress vars---------------------------------------------------------------------------------------------------------
 SRC_COUNT_TOT := $(shell expr $(shell echo -n $(SRC) | wc -w) - $(shell ls -l $(OBJ_DIR) 2>&1 | grep ".o" | wc -l) + 1)
 ifeq ($(shell test $(SRC_COUNT_TOT) -lt 0; echo $$?),0)
