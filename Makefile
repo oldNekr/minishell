@@ -32,6 +32,7 @@ CC		= cc -MD
 CFLAGS	= -Wextra -Werror -Wall
 RM		= rm -rf
 MKD		= mkdir -p
+PRINTF = LC_NUMERIC="en_US.UTF-8" printf
 
 SRC		= \
 # Progress vars---------------------------------------------------------------------------------------------------------
@@ -47,11 +48,11 @@ all: $(NAME)
 
 $(NAME): create_dirs compile_other $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $@
-	@printf "\r%100s\r$(GREEN)$(BIN) is up to date!$(DEFAULT)\n"
+	@$(PRINTF) "\r%100s\r$(GREEN)$(BIN) is up to date!$(DEFAULT)\n"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC)
 	@$(eval SRC_COUNT = $(shell expr $(SRC_COUNT) + 1))
-	@printf "\r%100s\r[ %d/%d (%d%%) ] Compiling $(BLUE)$<$(DEFAULT)..." "" $(SRC_COUNT) $(SRC_COUNT_TOT) $(SRC_PCT)
+	@$(PRINTF) "\r%100s\r[ %d/%d (%d%%) ] Compiling $(BLUE)$<$(DEFAULT)..." "" $(SRC_COUNT) $(SRC_COUNT_TOT) $(SRC_PCT)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 compile_other:
@@ -65,24 +66,34 @@ create_dirs:
 	@$(MKD) $(OBJ_DIR)
 
 clean:
-	@printf "$(CYAN)Cleaning up object files in $(BIN)...$(DEFAULT)\n"
+	@$(PRINTF) "$(CYAN)Cleaning up object files in $(BIN)...$(DEFAULT)\n"
 	@if [ -d "libft" ]; then \
 		  make clean -C libft; \
 	fi
 	@$(RM) $(OBJ_DIR)
 
+#fclean: clean
+#	@if [ -d "libft" ]; then \
+#		$(PRINTF) "$(CYAN)Removed libft$(DEFAULT)\n"; \
+#	fi
+#	@$(PRINTF) "$(CYAN)Removed $(NAME)$(DEFAULT)\n"
+#	@$(RM) -r $(BIN_DIR)
+#	@if [ -d "libft" ]; then \
+#  		$(RM) $(LIBFT); \
+#    fi
+
 fclean: clean
-	@$(RM) -r $(BIN_DIR)
 	@if [ -d "libft" ]; then \
+		$(PRINTF) "$(CYAN)Removed libft$(DEFAULT)\n"; \
 		$(RM) ./libft; \
 	fi
 	@$(PRINTF) "$(CYAN)Removed $(NAME)$(DEFAULT)\n"
-
+	@$(RM) -r $(BIN_DIR)
 
 re: fclean all
 
 norm:
-	@printf "$(CYAN)\nCheking norm for $(BIN)...$(DEFAULT)\n"
+	@$(PRINTF) "$(CYAN)\nCheking norm for $(BIN)...$(DEFAULT)\n"
 	@norminette -R CheckForbiddenSourseHeader $(SRC_DIR) inc/
 
 git:
