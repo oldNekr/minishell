@@ -91,6 +91,6 @@ git:
 	git push
 
 remove:
-	@$(RM) ../
+	@$(RM) ../$(BIN)
 
 .PHONY: all clean fclean re compile_other create_dirs norm git
