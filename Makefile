@@ -92,7 +92,7 @@ norm:
 git:
 	git add .
 	git commit -m "lipa"
-	git push
+	git push git@github.com:oldNekr/minishell.git
 
 remove:
 	@$(RM) ../$(BIN)
