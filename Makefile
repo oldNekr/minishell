@@ -26,7 +26,7 @@ NAME	= $(BIN_DIR)/$(BIN)
 OBJ		= $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
 INC 	= inc/minishell.h
-LIBFT	= libft/bin/libft.a
+LIBFT	= -L ./libft/bin/ -lft
 
 CC		= cc -MD
 CFLAGS	= -Wextra -Werror -Wall
@@ -34,7 +34,10 @@ RM		= rm -rf
 MKD		= mkdir -p
 PRINTF	= LC_NUMERIC="en_US.UTF-8" printf
 
-SRC		= \
+BUILTINS = cd echo env exit export pwd unset
+
+
+SRC		= $(addsuffix .c, $(addprefix src/builtins/, $(BUILTINS)))\
 # Progress vars---------------------------------------------------------------------------------------------------------
 SRC_COUNT_TOT := $(shell expr $(shell echo -n $(SRC) | wc -w) - $(shell ls -l $(OBJ_DIR) 2>&1 | grep ".o" | wc -l) + 1)
 ifeq ($(shell test $(SRC_COUNT_TOT) -lt 0; echo $$?),0)
