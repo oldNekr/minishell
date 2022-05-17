@@ -16,6 +16,7 @@ int main(int argc, char **argv, char **envp)
 {
 	(void )argc;
 	(void )argv;
+	(void )envp;
 	printf(CYAN"mmassssd\n"DEFAULT);
 	printf("qwed");
 	return (0);
