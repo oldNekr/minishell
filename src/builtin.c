@@ -28,8 +28,8 @@ int builtins(char **argv)
 	if (ft_strcmp(argv[0], "export") == 0)
 		result = 5;
 	if (ft_strcmp(argv[0], "pwd") == 0)
-		result = 6;
-	if (ft_strcmp(argv[0], "uset") == 0)
+		result = ft_pwd();
+	if (ft_strcmp(argv[0], "unset") == 0)
 		result = 7;
 	return (result);
 }

@@ -1,5 +1,5 @@
-#ifndef UNTITLED_MINISHELL_H
-# define UNTITLED_MINISHELL_H
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
 # include "../libft/inc/libft.h"
 //# include <errno.h>
@@ -12,9 +12,16 @@
 # define CYAN "\033[0;96m"
 # define DEFAULT "\033[0;39m"
 
+char **g_env;
+
 typedef struct s_mini
 {
-
+	char	**shell;
+	char	*env;
+	struct s_mini *next;
 }			t_mini;
+
+int	ft_pwd(void);
+
 
 #endif
