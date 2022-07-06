@@ -1,13 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_lstsize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lrosby <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: pshandy <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/11 03:18:27 by lrosby            #+#    #+#             */
-/*   Updated: 2022/05/11 03:18:29 by lrosby           ###   ########.fr       */
+/*   Created: 2021/10/18 12:12:31 by pshandy           #+#    #+#             */
+/*   Updated: 2021/10/18 12:12:32 by pshandy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+/*
+ * int		ft_lstsize(t_list *lst)
+ *
+ * Counts the number of elements in a list.
+ */
+
+#include "libft.h"
+
+int	ft_lstsize(t_list *lst)
+{
+	int		len;
+	t_list	*it;
+
+	len = 0;
+	it = lst;
+	while (it)
+	{
+		len++;
+		it = it->next;
+	}
+	return (len);
+}

@@ -1,13 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lrosby <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: pshandy <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/11 03:18:51 by lrosby            #+#    #+#             */
-/*   Updated: 2022/05/11 03:18:52 by lrosby           ###   ########.fr       */
+/*   Created: 2021/10/14 11:57:10 by pshandy           #+#    #+#             */
+/*   Updated: 2021/10/14 11:57:12 by pshandy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+/*
+ * int ft_isprint(int c)
+ *
+ * Checks for any printable character including space.
+ * 
+ * Return: 0 or 1.
+ */
+
+#include "libft.h"
+
+int	ft_isprint(int c)
+{
+	return (c >= 32 && c <= 126);
+}

@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lrosby <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: pshandy <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/11 03:06:43 by lrosby            #+#    #+#             */
-/*   Updated: 2022/05/11 03:06:45 by lrosby           ###   ########.fr       */
+/*   Created: 2021/10/14 11:55:58 by pshandy           #+#    #+#             */
+/*   Updated: 2021/10/14 11:56:00 by pshandy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+/*
+ * int ft_isdigit(int c)
+ *
+ * Checks for a digit (0 through 9).
+ *
+ * Return: 0 or 1.
+ */
 
-int	ft_pwd(void)
+#include "libft.h"
+
+int	ft_isdigit(int c)
 {
-	char	cwd[PATH_MAX];
-	if (getcwd(cwd, PATH_MAX))
-	{
-		ft_putendl_fd(cwd, 1);
-		return (EXIT_SUCCESS);
-	}
-	return (EXIT_FAILURE);
+	return (c >= '0' && c <= '9');
 }
