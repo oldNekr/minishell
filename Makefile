@@ -1,97 +1,88 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: lrosby <marvin@42.fr>                      +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/10/14 22:06:21 by lrosby            #+#    #+#              #
-#    Updated: 2021/10/14 22:10:28 by lrosby           ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-# Color Aliases---------------------------------------------------------------------------------------------------------
+# Color Aliases
 DEFAULT	= \033[0;39m
 GREEN	= \033[0;92m
 BLUE	= \033[0;94m
 CYAN	= \033[0;96m
+RED		= \033[0;91m
 
-# Make variables--------------------------------------------------------------------------------------------------------
-BIN_DIR	= bin
-SRC_DIR	= src
-OBJ_DIR	= obj
+# Make variables
+CC			= cc
+CFLAGS		= -Wextra -Werror -Wall
+RM			= rm -f
 
-BIN		= minishell
-NAME	= $(BIN_DIR)/$(BIN)
-OBJ		= $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
+INC	= minishell.h
+#LIBFT = -L libft -lft
 
-INC 	= inc/minishell.h
-LIBFT	= -L ./libft/bin/ -lft
 
-CC		= cc -MD
-CFLAGS	= -Wextra -Werror -Wall
-RM		= rm -rf
-MKD		= mkdir -p
+NAME = minishell
+LIB = minishell.a
 
-SRC = $(wildcard src/*.c)
+BUILTIN = ft_cd ft_echo ft_env ft_exit ft_export ft_pwd ft_unset
 
-# Progress vars---------------------------------------------------------------------------------------------------------
-SRC_COUNT_TOT := $(shell expr $(shell echo -n $(SRC) | wc -w) - $(shell ls -l $(OBJ_DIR) 2>&1 | grep ".o" | wc -l) + 1)
-ifeq ($(shell test $(SRC_COUNT_TOT) -lt 0; echo $$?),0)
-	SRC_COUNT_TOT := $(shell echo -n $(SRC) | wc -w)
-endif
-SRC_COUNT := 0
-SRC_PCT = $(shell expr 100 \* $(SRC_COUNT) / $(SRC_COUNT_TOT))
+CMD = cmd_list cmd_utils get_cmd
 
-# Make Commands---------------------------------------------------------------------------------------------------------
-all: $(NAME)
+ENV = ft_split2 handle_envp hashmap hashmap2 hashmaplist
 
-$(NAME): create_dirs compile_other $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $@
-	@printf "\r%100s\r$(GREEN)$(BIN) is up to date!$(DEFAULT)\n"
+EXECUTE = execute execute_utils is_cmd_present launch pipes shlvl
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC)
-	@$(eval SRC_COUNT = $(shell expr $(SRC_COUNT) + 1))
-	@printf "\r%100s\r[ %d/%d (%d%%) ] Compiling $(BLUE)$<$(DEFAULT)..." "" $(SRC_COUNT) $(SRC_COUNT_TOT) $(SRC_PCT)
+SIGNALS = signals
+
+TOKENIZER = handle_dollar order_check token_list tokenize utils
+
+MAIN = minishell
+
+LIBFT	=	ft_atoi.c		ft_isalpha.c	ft_itoa.c\
+			ft_putendl_fd.c	ft_strdup.c		ft_strstr.c\
+			ft_strmapi.c	ft_tolower.c	ft_bzero.c\
+			ft_isascii.c	ft_memcpy.c		ft_memmove.c\
+			ft_putnbr_fd.c	ft_strlcat.c	ft_strncmp.c\
+			ft_toupper.c	ft_calloc.c		ft_isdigit.c\
+			ft_memchr.c		ft_memset.c		ft_putstr_fd.c\
+			ft_strlcpy.c	ft_strnstr.c	ft_isalnum.c\
+			ft_isprint.c	ft_memcmp.c		ft_putchar_fd.c\
+			ft_strchr.c		ft_strlen.c		ft_strrchr.c\
+			ft_striteri.c	ft_substr.c		ft_strjoin.c\
+			ft_split.c		ft_strtrim.c\
+			ft_strcmp.c		ft_isspace.c		ft_strcpy.c\
+			ft_lstnew.c		ft_lstadd_front.c	ft_lstsize.c\
+			ft_lstlast.c	ft_lstadd_back.c	ft_lstdelone.c\
+			ft_lstclear.c	ft_lstiter.c		ft_lstmap.c\
+
+SRC = $(addsuffix .c, $(addprefix builtin/, $(BUILTIN))) \
+	  $(addsuffix .c, $(addprefix cmd/, $(CMD))) \
+	  $(addsuffix .c, $(addprefix env/, $(ENV))) \
+	  $(addsuffix .c, $(addprefix execute/, $(EXECUTE))) \
+	  $(addsuffix .c, $(addprefix signals/, $(SIGNALS))) \
+	  $(addsuffix .c, $(addprefix tokenizer/, $(TOKENIZER))) \
+	  $(addprefix libft/, $(LIBFT))\
+	  $(addsuffix .c, $(MAIN)) \
+
+OBJ = $(SRC:%.c=%.o)
+
+# Make Commands
+all:	$(NAME)
+
+$(NAME):  $(OBJ)
+	@printf "\n$(BLUE)Compiling $(NAME)...$(DEFAULT)"
+	@ar rcs $(LIB) $?
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LIB) -lreadline
+	@printf "\n$(GREEN)Ready!\n$(DEFAULT)"
+
+%.o:	%.c
+	@printf "$(BLUE)Generation $(CYAN)%-33.33s\r$(DEFAULT)" $@
 	@$(CC) $(CFLAGS) -c $< -o $@
-
-compile_other:
-	@if [ ! -d "libft" ]; then \
-		git clone git@github.com:oldNekr/libft.git; \
-	fi
-	@make all -C libft/
-
-create_dirs:
-	@$(MKD) $(BIN_DIR)
-	@$(MKD) $(OBJ_DIR)
-
 clean:
-	@printf "$(CYAN)Cleaning up object files in $(BIN)...$(DEFAULT)\n"
-	@if [ -d "libft" ]; then \
-		  make clean -C libft; \
-	fi
-	@$(RM) $(OBJ_DIR)
+	@#make clean -C libft/
+#	@printf "$(RED)Cleaning up object files in libft...$(DEFAULT)\n"
+	@$(RM) $(OBJ)
+	@printf "$(RED)Cleaning up object files in $(NAME)...$(DEFAULT)\n"
 
-fclean: clean
-	@if [ -d "libft" ]; then \
-		printf "$(CYAN)Removed libft$(DEFAULT)\n"; \
-		$(RM) ./libft; \
-	fi
-	@printf "$(CYAN)Removed $(NAME)$(DEFAULT)\n"
-	@$(RM) -r $(BIN_DIR)
+fclean:		clean
+	@#make fclean -C libft/
+#	@printf "$(RED)Removed libft$(DEFAULT)\n"
+	@$(RM) $(NAME) $(LIB)
+	@printf "$(RED)Removed $(NAME)$(DEFAULT)\n"
 
-re: fclean all
+re:			fclean all
 
-norm:
-	@printf "$(CYAN)\nCheking norm for $(BIN)...$(DEFAULT)\n"
-	@norminette -R CheckForbiddenSourseHeader $(SRC_DIR) inc/
-
-git:
-	git add .
-	git commit -m "lipa"
-	git push git@github.com:oldNekr/minishell.git
-
-remove:
-	@$(RM) ../$(BIN)
-
-.PHONY: all clean fclean re compile_other create_dirs norm git remove
+.PHONY:	all clean fclean re
