@@ -25,10 +25,7 @@ int	ft_echo(char **args)
 		nl = ++i;
 	while (args[i])
 	{
-		if (args[i + 1])
-			printf("%s ", args[i]);
-		else
-			printf("%s", args[i]);
+		write(1, args[i], ft_strlen(args[i]));
 		i++;
 	}
 	if (!nl)
