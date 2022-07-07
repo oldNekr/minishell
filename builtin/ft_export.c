@@ -73,15 +73,12 @@ int	ft_export(t_data *data, char *str)
 
 	if (!str || ft_strchr(str, '=') == 0 || *str == '=')
 		return (1);
-	strarr = ft_split2(str, '=');
-	if (!is_letter(strarr[0]))
+	if (ft_isdigit(str[0]))
 	{
-		printf("Ошибка в значении ключа!\n");
-		free(strarr[0]);
-		free(strarr[1]);
-		free(strarr);
-		return (1);
+		printf("Not a valid identifier\n");
+		return (EXIT_FAILURE);
 	}
+	strarr = ft_split2(str, '=');
 	tmp = get_record(data, strarr[0]);
 	if (tmp == NULL)
 		add_to_hashmap(data, strarr[0], strarr[1]);
