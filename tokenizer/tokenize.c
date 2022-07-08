@@ -18,26 +18,28 @@
 
 char	*get_token_str(char **line)
 {
-	int		single_quote;
-	int		double_quote;
+	int		sq;
+	int		dq;
 	char	*token_str;
 
-	single_quote = 0;
-	double_quote = 0;
+	sq = 0;
+	dq = 0;
 	token_str = NULL;
 	while (**line)
 	{
-		if (quote_pick(**line, &single_quote, &double_quote))
+		if (quote_pick(**line, &sq, &dq))
 			;
-		else if (!double_quote && !single_quote
-			&& (is_special_char(*line) || ft_isspace(**line)))
+		else if (!dq && !sq && (is_special_char(*line) || ft_isspace(**line)))
 		{
 			if (!ft_isspace(**line) && token_str == NULL)
 				token_str = get_special_char(line);
 			break ;
 		}
 		else
+		{
+			*line = *line + (**line == '\\' && *(*line + 1) == '\"');
 			add_char(&token_str, **line);
+		}
 		*line = *line + 1;
 	}
 	return (token_str);
