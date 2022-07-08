@@ -16,36 +16,44 @@
  * Ищет на что заменить доллар и возвращает строку с этим значением
  */
 
-int	ft_eq(char c)
+int	is_eq(char c)
 {
-	return (c == '=');
+	return (ft_isalnum(c) || c == '_');
 }
 
-static char	*get_add(t_data *data, char **line)
+static char	*get_add2(t_data *data, char **line)
 {
 	char	*tmp;
 	char	*to_add;
 
+	tmp = ft_strdup("");
+	while (**line && **line != '\'' && **line != '\"' && **line != '$'
+		&& !is_special_char(*line) && is_eq(**line) && **line != '\\')
+	{
+		add_char(&tmp, **line);
+		*line = *line + 1;
+	}
+	to_add = ft_strdup(get_value(data, tmp));
+	if (!to_add)
+		to_add = ft_strdup("");
+	free(tmp);
+	return (to_add);
+}
+
+static char	*get_add(t_data *data, char **line)
+{
 	*line = *line + 1;
 	if (**line == '?')
 	{
 		*line = *line + 1;
 		return (ft_itoa(data->exit_code));
 	}
+	else if (!ft_isdigit(**line))
+		return (get_add2(data, line));
 	else
 	{
-		tmp = ft_strdup("");
-		while (**line && **line != '\'' && **line != '\"' && **line != '$'
-			&& !is_special_char(*line) && !ft_isspace(**line) && !ft_eq(**line))
-		{
-			add_char(&tmp, **line);
-			*line = *line + 1;
-		}
-		to_add = ft_strdup(get_value(data, tmp));
-		if (!to_add)
-			to_add = ft_strdup("");
-		free(tmp);
-		return (to_add);
+		*line = *line + 1;
+		return (ft_strdup(""));
 	}
 }
 
@@ -54,6 +62,15 @@ static char	*get_add(t_data *data, char **line)
  * Если встречается $ происходит расширение строки и замена
  * переменных среды.
  */
+
+int	handle_check(char *str, int single_quote)
+{
+	if (*str == '$' && *(str + 1) && !single_quote && (ft_isalnum(*(str + 1))
+			|| *(str + 1) == '_') && !ft_isspace(*(str + 1))
+		&& *(str + 1) != '\'' && *(str + 1) != '\"')
+		return (1);
+	return (0);
+}
 
 char	*handle_dollar(t_data *data, char *str)
 {
@@ -69,8 +86,7 @@ char	*handle_dollar(t_data *data, char *str)
 	while (*str)
 	{
 		quote_pick(*str, &single_quote, &double_quote);
-		if (*str == '$' && *(str + 1) && !single_quote && \
-			!ft_isspace(*(str + 1)) && *(str + 1) != '\'' && *(str + 1) != '\"')
+		if (handle_check(str, single_quote))
 		{
 			to_add = get_add(data, &str);
 			result = ft_strjoin(new_line, to_add);
