@@ -18,6 +18,8 @@ void	wait_all(t_data *data)
 	int		status;
 	t_cmd	*tmp;
 
+	pid = 0;
+	status = 0;
 	tmp = data->cmds->next;
 	while (tmp != data->cmds)
 	{
