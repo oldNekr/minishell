@@ -16,30 +16,31 @@
  * Проверяет на соответствие одиночные и двойные кавычки
  */
 
-int	check_quotes(char *buf)
+int	check_quotes(char *b)
 {
-	int	i;
+	int		i;
+	char	c;
 
 	i = 0;
-	while (buf[i])
+	while (b[i])
 	{
-		if (buf[i] == '\'')
+		if (b[i] == '\\' && (b[i + 1] == '\"' || b[i + 1] == '\''))
+			i = i + 2;
+		else
 		{
-			i++;
-			while (buf[i] && buf[i] != '\'')
+			if (b[i] == '\'' || b[i] == '\"')
+			{
+				c = b[i];
 				i++;
-			if (buf[i] == '\0')
+				while (b[i] && b[i] != c)
+					if (b[i] == '\\' && (b[i + 1] == '\"' || b[i + 1] == '\''))
+						i = i + 2;
+				else
+						i++;
+			}
+			if (b[i++] == '\0')
 				return (0);
 		}
-		else if (buf[i] == '\"')
-		{
-			i++;
-			while (buf[i] && buf[i] != '\"')
-				i++;
-			if (buf[i] == '\0')
-				return (0);
-		}
-		i++;
 	}
 	return (1);
 }
