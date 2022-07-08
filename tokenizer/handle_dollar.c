@@ -63,12 +63,25 @@ static char	*get_add(t_data *data, char **line)
  * переменных среды.
  */
 
-int	handle_check(char *str, int single_quote)
+int	handle_dollar2(t_data *data, char **str, int single_quote, char **new_line)
 {
-	if (*str == '$' && *(str + 1) && !single_quote && (ft_isalnum(*(str + 1))
-			|| *(str + 1) == '_') && !ft_isspace(*(str + 1))
-		&& *(str + 1) != '\'' && *(str + 1) != '\"')
+	char	*to_add;
+	char	*result;
+
+	if (*(*str) == '$' && *(str + 1)
+		&& !single_quote
+		&& (ft_isalnum(*(*(str) + 1)) || *(*(str) + 1) == '_'
+			|| *(*(str) + 1) == '?')
+		&& !ft_isspace(*(*(str) + 1))
+		&& *(*(str) + 1) != '\'' && *(*(str) + 1) != '\"')
+	{
+		to_add = get_add(data, str);
+		result = ft_strjoin(*new_line, to_add);
+		free(*new_line);
+		free(to_add);
+		*new_line = result;
 		return (1);
+	}
 	return (0);
 }
 
@@ -77,24 +90,20 @@ char	*handle_dollar(t_data *data, char *str)
 	int		single_quote;
 	int		double_quote;
 	char	*new_line;
-	char	*to_add;
-	char	*result;
 
 	new_line = ft_strdup("");
 	single_quote = 0;
 	double_quote = 0;
 	while (*str)
 	{
-		quote_pick(*str, &single_quote, &double_quote);
-		if (handle_check(str, single_quote))
+		if (*(str) == '\\' && *(str + 1) == '$')
 		{
-			to_add = get_add(data, &str);
-			result = ft_strjoin(new_line, to_add);
-			free(new_line);
-			free(to_add);
-			new_line = result;
+			str++;
+			add_char(&new_line, *str++);
+			continue ;
 		}
-		else
+		quote_pick(*str, &single_quote, &double_quote);
+		if (!handle_dollar2(data, &str, single_quote, &new_line))
 			add_char(&new_line, *str++);
 	}
 	return (new_line);

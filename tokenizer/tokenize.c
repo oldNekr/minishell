@@ -37,7 +37,7 @@ char	*get_token_str(char **line)
 		}
 		else
 		{
-			*line = *line + (**line == '\\' && *(*line + 1) == '\"');
+			*line = *line + (**line == '\\' && (*(*line + 1) == '\"'));
 			add_char(&token_str, **line);
 		}
 		*line = *line + 1;
