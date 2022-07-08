@@ -73,7 +73,7 @@ int	ft_export(t_data *data, char *str)
 
 	if (!str || ft_strchr(str, '=') == 0 || *str == '=')
 		return (1);
-	if (ft_isdigit(str[1]))
+	if (ft_isdigit(str[0]))
 	{
 		printf("Not a valid identifier\n");
 		return (EXIT_FAILURE);
