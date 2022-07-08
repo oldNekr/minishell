@@ -66,15 +66,20 @@ void	execute(t_data *data)
 	t_cmd	*cmd;
 
 	cmd = data->cmds->next;
-	if (is_built_in(cmd->args[0]) && cmd->next == data->cmds
-		&& cmd->to_skip == 0)
-		launch_builtin(data, cmd);
-	else
+	if (cmd->args)
 	{
-		if (cmd->next == data->cmds)
-			fork_and_chain(data, cmd, NULL, NULL);
+		if (is_built_in(cmd->args[0]) && cmd->next == data->cmds
+			&& cmd->to_skip == 0)
+			launch_builtin(data, cmd);
 		else
-			run_chain(data, lpipe, rpipe);
-		wait_all(data);
+		{
+			if (cmd->next == data->cmds)
+				fork_and_chain(data, cmd, NULL, NULL);
+			else
+				run_chain(data, lpipe, rpipe);
+			wait_all(data);
+		}
 	}
+	else
+		data->exit_code = 0;
 }
